@@ -82,9 +82,19 @@ class SlackIndexer:
     def index_channel(self, channel_id, channel_name):
         """Index all messages from a channel"""
         print(f"\nIndexing channel: #{channel_name}")
+        
+        # Try to join the channel first
+        try:
+            self.slack_client.conversations_join(channel=channel_id)
+            print(f"Joined #{channel_name}")
+        except Exception as e:
+            print(f"Could not join #{channel_name}: {e}")
+        
         messages = self.get_channel_history(channel_id)
         
         print(f"Found {len(messages)} messages")
+        
+        # ... rest of the method stays the same ...
         
         batch_size = 100
         for i in range(0, len(messages), batch_size):
