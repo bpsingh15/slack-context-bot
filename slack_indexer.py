@@ -1,7 +1,7 @@
 from slack_sdk import WebClient
 from langchain_openai import OpenAIEmbeddings
-from config import SLACK_BOT_TOKEN, OPENAI_API_KEY
-from pinecone_setup import setup_pinecone
+from pinecone import Pinecone
+from config import SLACK_BOT_TOKEN, OPENAI_API_KEY, PINECONE_API_KEY, PINECONE_INDEX_NAME
 import time
 from datetime import datetime
 
@@ -9,7 +9,11 @@ class SlackIndexer:
     def __init__(self):
         self.slack_client = WebClient(token=SLACK_BOT_TOKEN)
         self.embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-        self.index = setup_pinecone()
+        # Initialize Pinecone with new API
+        pc = Pinecone(api_key=PINECONE_API_KEY)
+        self.index = pc.Index(PINECONE_INDEX_NAME)
+    
+    # ... rest of the class stays the same ...
         
     def get_all_channels(self):
         """Fetch all public channels"""
