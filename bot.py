@@ -58,7 +58,7 @@ def handle_mention(event, say):
     
     try:
         # Get answer from chain
-        result = qa_chain({"question": question})
+        result = qa_chain.invoke({"question": question})
         answer = result['answer']
         source_docs = result.get('source_documents', [])
         
@@ -87,6 +87,10 @@ def handle_mention(event, say):
 def handle_hello(message, say):
     """Respond to hello messages"""
     say(f"Hey there <@{message['user']}>! 👋")
+
+@app.event("message")
+def handle_message_events(body, logger):
+    pass  # Ignore all other messages
 
 if __name__ == "__main__":
     print("⚡ Bot is running!")
